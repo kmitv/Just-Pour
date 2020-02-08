@@ -10,14 +10,55 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, World!")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-}
+        
 
+        Section {
+            NavigationView {
+              
+                
+                    
+                    List {
+                        NavigationLink(destination: DetailView()) {
+                            Text("Detail")
+                        }
+                        NavigationLink(destination: DetailView()) {
+                            Text("Hello World")
+                        }
+                        NavigationLink(destination: DetailView()) {
+                            Text("Hello World")
+                        }
+                        NavigationLink(destination: DetailView()) {
+                            Text("Hello World")
+                        }
+                        NavigationLink(destination: Text("Detail View")) {
+                            Text("Hello World")
+                        }
+                    }
+                    .frame(minWidth: 100.00, maxWidth: 100.00, minHeight: 300.0, maxHeight: .infinity)
+                
+            }
+            
+            
+            }.frame(width: 300.00, alignment: .leading)
+
+        }
+
+    }
+
+struct DetailView: View {
+  let discipline = "ddddd"
+  var body: some View {
+    Section {
+        Text("pepepepe")
+    }
+    
+  }
+}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
 }
+
+
