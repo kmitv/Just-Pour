@@ -39,7 +39,7 @@ struct ContentView: View {
                     }
                 .frame(minWidth: 150.00, maxWidth: 150.00, minHeight: 300.0, maxHeight: .infinity).listStyle(SidebarListStyle())
             }
-        }.frame(minWidth: 500.00, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        }.frame(minWidth: 650.00, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
     }
 }
 
@@ -49,31 +49,39 @@ struct DetailView: View {
     var methodPicture: String
     
     var body: some View {
-        Section {
-            
-            VStack(spacing: 20.0) {
-                VStack(alignment: .center) {
-                    Image(methodPicture)
-                        .resizable().frame(width: 64.0, height: 64.0)
-                    Text(methodName)
-                        .foregroundColor(/*@START_MENU_TOKEN@*/.white/*@END_MENU_TOKEN@*/)
+        
+        VStack {
+            Section {
+                VStack(spacing: 20.0) {
+                    VStack(alignment: .center) {
+                        Image(methodPicture)
+                            .resizable().frame(width: 64.0, height: 64.0)
+                        Text(methodName)
+                            .foregroundColor(/*@START_MENU_TOKEN@*/.white/*@END_MENU_TOKEN@*/)
+                    }
+                    .frame(width: 100.00, height: 100.00)
+                    .padding(.horizontal, 20.0)
+                    .padding(.vertical, 10.0)
+                    .background(/*@START_MENU_TOKEN@*/Color.blue/*@END_MENU_TOKEN@*/)
+                    .cornerRadius(15.00)
+                    Text(methodDescription)
+                        .frame(width: 400.00, height: 75.00)
+                        .multilineTextAlignment(.center)
                 }
-                .frame(width: 100.00, height: 100.00)
-                .padding(.horizontal, 20.0)
-                .padding(.vertical, 10.0)
-                .background(/*@START_MENU_TOKEN@*/Color.blue/*@END_MENU_TOKEN@*/)
-                .cornerRadius(15.00)
-                Text(methodDescription)
-                    .multilineTextAlignment(.center)
-            }
-            .padding(.horizontal, 30.0)
-            
+                .padding(.horizontal, 30.0)
+            }.frame(minHeight: 250.00)
+            Section {
+                Text("dsdsdf")
+            }.frame(minWidth: 100.00, maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .padding(.top, 20.0)
 
-            
-            
+        
+        
+                
 
-            
-        }.frame(minWidth: 100.00, maxWidth: .infinity, maxHeight: .infinity)
+
+        
     }
 }
 
