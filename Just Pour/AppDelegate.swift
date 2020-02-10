@@ -29,6 +29,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.setFrameAutosaveName("Main Window")
         window.contentView = NSHostingView(rootView: contentView)
         window.makeKeyAndOrderFront(nil)
+        
+//        window?.titlebarAppearsTransparent = true        
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

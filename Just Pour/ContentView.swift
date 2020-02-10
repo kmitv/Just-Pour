@@ -36,7 +36,7 @@ struct ContentView: View {
                     NavigationLink(destination: DetailView(methodName: method.name, methodDescription: method.description, methodPicture: method.picture)) {
                         Text(method.name)
                     }
-                    }
+                }
                 .frame(minWidth: 150.00, maxWidth: 150.00, minHeight: 300.0, maxHeight: .infinity).listStyle(SidebarListStyle())
             }
         }.frame(minWidth: 650.00, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -44,6 +44,15 @@ struct ContentView: View {
 }
 
 struct DetailView: View {
+    
+    @State private var amount: Int = 15
+    @State private var water: Int = 234
+    @State private var ratio: Int = 18
+    
+    @State private var amountActive: Bool = true
+    @State private var waterActive: Bool = true
+    @State private var ratioActive: Bool = false
+    
     var methodName: String
     var methodDescription: String
     var methodPicture: String
@@ -71,17 +80,33 @@ struct DetailView: View {
                 .padding(.horizontal, 30.0)
             }.frame(minHeight: 250.00)
             Section {
-                Text("dsdsdf")
-            }.frame(minWidth: 100.00, maxWidth: .infinity, maxHeight: .infinity)
-        }
-        .padding(.top, 20.0)
-
-        
-        
+                
+                VStack {
+                    
+                    Toggle(isOn: $amountActive) {
+                        Stepper(value: $amount, in: 0...500, label: { Text("Coffee amount:  \(amount) g")}).disabled(!amountActive)
+                    }
+                    Toggle(isOn: $waterActive) {
+                        Stepper(value: $water, in: 0...500, label: { Text("Water:  \(water) ml")}).disabled(!waterActive)
+                    }
+                    Toggle(isOn: $ratioActive) {
+                        Stepper(value: $ratio, in: 0...500, label: { Text("Ratio:  \(ratio) g/ml")}).disabled(!ratioActive)
+                    }
+                    
+//                    Stepper(value: $amount, in: 0...500, label: { Text("Coffee amount:  \(amount) g")})
+//                    Stepper(value: $water, in: 0...500, label: { Text("Water:  \(water) ml")})
+//                    Stepper(value: $ratio, in: 0...500, label: { Text("Ratio:  \(ratio) g/ml")})
+                }
+                
+                
+//                TextField("Enter your name", text: $amount)
+//                Text("Hello, \(amount)!")
                 
 
-
-        
+                
+            }.frame(minWidth: 100.00, maxWidth: .infinity, maxHeight: .infinity).padding(.horizontal, 100.0)
+        }
+        .padding(.top, 20.0)
     }
 }
 
