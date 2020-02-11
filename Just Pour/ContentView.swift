@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    
+
     class pouroverMethod: Identifiable {
         var name: String
         var description: String
@@ -45,6 +45,8 @@ struct ContentView: View {
 
 struct DetailView: View {
     
+    @State private var radioSelection = 1
+    
     @State private var amount: Int = 15
     @State private var water: Int = 234
     @State private var ratio: Int = 18
@@ -52,10 +54,46 @@ struct DetailView: View {
     @State private var amountActive: Bool = true
     @State private var waterActive: Bool = true
     @State private var ratioActive: Bool = false
+
     
     var methodName: String
     var methodDescription: String
     var methodPicture: String
+    
+    func disableIfActive(activeIndex: Int, selected: Int) -> Bool {
+        if(activeIndex==selected){
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func amountUpdated(amount: Int, water: Int, ratio: Int, selection: Int) -> Void {
+        if(selection==2) {
+            self.ratio = water / amount
+        }
+        if(selection==3) {
+            self.water = amount * ratio
+        }
+    }
+    
+    func waterUpdated(amount: Int, water: Int, ratio: Int, selection: Int) -> Void {
+        if(selection==1) {
+            self.ratio = water / amount
+        }
+        if(selection==3) {
+            self.amount = water / ratio
+        }
+    }
+    
+    func ratioUpdated(amount: Int, water: Int, ratio: Int, selection: Int) -> Void {
+        if(selection==1) {
+            self.water = amount * ratio
+        }
+        if(selection==2) {
+            self.amount = water / ratio
+        }
+    }
     
     var body: some View {
         
@@ -80,30 +118,36 @@ struct DetailView: View {
                 .padding(.horizontal, 30.0)
             }.frame(minHeight: 250.00)
             Section {
-                
-                VStack {
+                Picker(selection: $radioSelection, label: EmptyView()) {
                     
-                    Toggle(isOn: $amountActive) {
-                        Stepper(value: $amount, in: 0...500, label: { Text("Coffee amount:  \(amount) g")}).disabled(!amountActive)
-                    }
-                    Toggle(isOn: $waterActive) {
-                        Stepper(value: $water, in: 0...500, label: { Text("Water:  \(water) ml")}).disabled(!waterActive)
-                    }
-                    Toggle(isOn: $ratioActive) {
-                        Stepper(value: $ratio, in: 0...500, label: { Text("Ratio:  \(ratio) g/ml")}).disabled(!ratioActive)
-                    }
+                    Stepper(onIncrement: {
+                        self.amount += 1
+                        self.amountUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+                    }, onDecrement: {
+                        self.amount -= 1
+                        self.amountUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+                    }, label: { Text("Coffee amount:  \(amount) g")}
+                    ).tag(1).disabled(disableIfActive(activeIndex: 1, selected: radioSelection))
                     
-//                    Stepper(value: $amount, in: 0...500, label: { Text("Coffee amount:  \(amount) g")})
-//                    Stepper(value: $water, in: 0...500, label: { Text("Water:  \(water) ml")})
-//                    Stepper(value: $ratio, in: 0...500, label: { Text("Ratio:  \(ratio) g/ml")})
-                }
-                
-                
-//                TextField("Enter your name", text: $amount)
-//                Text("Hello, \(amount)!")
-                
-
-                
+                    Stepper(onIncrement: {
+                        self.water += 1
+                        self.waterUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+                    }, onDecrement: {
+                        self.water -= 1
+                        self.waterUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+                    }, label: { Text("Water:  \(water) ml")}
+                    ).tag(2).disabled(disableIfActive(activeIndex: 2, selected: radioSelection))
+                    
+                    Stepper(onIncrement: {
+                        self.ratio += 1
+                        self.ratioUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+                    }, onDecrement: {
+                        self.ratio -= 1
+                        self.ratioUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+                    }, label: { Text("Coffee to water ratio:  \(ratio) g/ml")}
+                    ).tag(3).disabled(disableIfActive(activeIndex: 3, selected: radioSelection))
+                    
+                }.pickerStyle(RadioGroupPickerStyle())
             }.frame(minWidth: 100.00, maxWidth: .infinity, maxHeight: .infinity).padding(.horizontal, 100.0)
         }
         .padding(.top, 20.0)
@@ -115,5 +159,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
-
