@@ -43,6 +43,68 @@ struct ContentView: View {
     }
 }
 
+struct SheetView: View {
+    @Environment(\.presentationMode) var presentationMode
+    
+    @State var bloomPourTime = 10
+//    @State var bloomTime = 45
+    @State var bloomTime = 5
+    @State var totalTime = 0
+    
+    @State var bloomPourFinished: Bool = false
+    @State var bloomWaitFinished: Bool = false
+
+
+    @State var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+    
+    var body: some View {
+        
+        Section {
+            VStack {
+                
+                if self.bloomPourFinished == false {
+                    Text("Pour x ml of water \(bloomPourTime)")
+                        .onReceive(timer) { _ in
+                            if self.bloomPourTime > 0 && self.bloomPourFinished == false {
+                                self.bloomPourTime -= 1
+                            } else if (self.bloomPourTime == 0) {
+                                self.bloomPourFinished = true
+                                self.timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+                            }
+                        }
+                }
+                
+                if self.bloomPourFinished == true && self.bloomWaitFinished == false {
+                    Text("Wait for your coffee to bloom \(bloomTime)")
+                        .onReceive(timer) { _ in
+                            if self.bloomTime > 0 && self.bloomPourFinished == true && self.bloomWaitFinished == false {
+                                self.bloomTime -= 1
+                            } else if (self.bloomTime == 0) {
+                                self.bloomWaitFinished = true
+                                self.timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+                            }
+                    }
+                }
+
+                Text("Total brew time: \(totalTime)")
+                    .onReceive(timer) { _ in
+                        self.totalTime += 1
+                    }
+                
+                
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+
+                }) {
+                    Text("Cancel")
+                }
+            }
+        }.frame(minWidth: 300.00, minHeight: 200.00)
+        
+    }
+}
+
 struct DetailView: View {
     
     @State private var radioSelection = 1
@@ -55,6 +117,7 @@ struct DetailView: View {
     @State private var waterActive: Bool = true
     @State private var ratioActive: Bool = false
 
+    @State var showSheetView = false
     
     var methodName: String
     var methodDescription: String
@@ -148,6 +211,16 @@ struct DetailView: View {
                     ).tag(3).disabled(disableIfActive(activeIndex: 3, selected: radioSelection))
                     
                 }.pickerStyle(RadioGroupPickerStyle())
+                
+                
+                Button(action: {
+                    self.showSheetView.toggle()
+                }) {
+                    Text("Start brewing")
+                }.sheet(isPresented: $showSheetView) {
+                    SheetView()
+                }
+                
             }.frame(minWidth: 100.00, maxWidth: .infinity, maxHeight: .infinity).padding(.horizontal, 100.0)
         }
         .padding(.top, 20.0)
