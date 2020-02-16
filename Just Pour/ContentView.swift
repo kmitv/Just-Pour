@@ -46,16 +46,24 @@ struct ContentView: View {
 struct SheetView: View {
     @Environment(\.presentationMode) var presentationMode
     
-    @State var bloomPourTime = 10
-//    @State var bloomTime = 45
-    @State var bloomTime = 5
-    @State var totalTime = 0
+    @State var bloomPourTime: CGFloat = 10
+    @State var bloomPourTimeConstant: CGFloat = 10
+    
+    @State var bloomTime: CGFloat = 5
+    @State var totalTime: CGFloat = 0
     
     @State var bloomPourFinished: Bool = false
     @State var bloomWaitFinished: Bool = false
-
+    
+    var refreshFrequency: CGFloat = 0.05
 
     @State var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+//    @State var timer: Publishers.Autoconnect<Timer.TimerPublisher>;
+    
+//    func getPercentage(_ current:CGFloat, constant:CGFloat) -> String {
+//        let intValue = Int(ceil(value * 100))
+//        return "\(intValue) %"
+//    }
 
     
     var body: some View {
@@ -64,32 +72,49 @@ struct SheetView: View {
             VStack {
                 
                 if self.bloomPourFinished == false {
-                    Text("Pour x ml of water \(bloomPourTime)")
+                    
+                    
+                    
+                    Circle()
+                        .trim(from: 0, to: (CGFloat(bloomPourTime/bloomPourTimeConstant)))
+                        .stroke(Color.green, lineWidth:5)
+                        .frame(width:100)
+                        .rotationEffect(Angle(degrees:-90))
+                        .onAppear(perform: {
+                            self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                            
+                        })
                         .onReceive(timer) { _ in
                             if self.bloomPourTime > 0 && self.bloomPourFinished == false {
-                                self.bloomPourTime -= 1
-                            } else if (self.bloomPourTime == 0) {
+                                self.bloomPourTime -= self.refreshFrequency
+                                print(self.bloomPourTime)
+                            } else if (self.bloomPourTime < 0) {
                                 self.bloomPourFinished = true
-                                self.timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+                                self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
                             }
                         }
+                    Text("Pour first batch of water for coffee to bloom \(Int(ceil(bloomPourTime)))")
                 }
                 
                 if self.bloomPourFinished == true && self.bloomWaitFinished == false {
-                    Text("Wait for your coffee to bloom \(bloomTime)")
+                    Text("Wait for your coffee to bloom \(Int(ceil(bloomTime)))")
                         .onReceive(timer) { _ in
                             if self.bloomTime > 0 && self.bloomPourFinished == true && self.bloomWaitFinished == false {
-                                self.bloomTime -= 1
-                            } else if (self.bloomTime == 0) {
+                                self.bloomTime -= self.refreshFrequency
+                            } else if (self.bloomTime < 0) {
                                 self.bloomWaitFinished = true
-                                self.timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+                                self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
                             }
                     }
                 }
 
-                Text("Total brew time: \(totalTime)")
+                Text("Total brew time: \(Int(totalTime))")
+                    .onAppear(perform: {
+                        self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                        
+                    })
                     .onReceive(timer) { _ in
-                        self.totalTime += 1
+                        self.totalTime += self.refreshFrequency
                     }
                 
                 
