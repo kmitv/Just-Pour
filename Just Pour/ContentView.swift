@@ -28,6 +28,14 @@ struct ContentView: View {
         pouroverMethod(name: "Chemex", description: "The Chemex Coffeemaker is a manual pour-over style glass coffeemaker. The thicker paper of the Chemex filters removes most of the coffee oils and makes coffee that is much \"cleaner\" than coffee brewed in other coffee-making systems.", picture:"chemex_icon"),
         pouroverMethod(name: "Kalita Wave", description: "The Kalita Wave has a flat bed with three little holes at the bottom; this shape allows for an even and stable extraction.  ", picture:"kalita_icon")
     ]
+    
+    func disableLink(method: pouroverMethod) -> Bool {
+        if(method.name != "V60"){
+            return true
+        } else {
+            return false
+        }
+    }
 
     var body: some View {
         Section {
@@ -35,11 +43,11 @@ struct ContentView: View {
                 List(pouroverMethodList) { method in
                     NavigationLink(destination: DetailView(methodName: method.name, methodDescription: method.description, methodPicture: method.picture)) {
                         Text(method.name)
-                    }
+                    }.disabled(self.disableLink(method: method))
                 }
                 .frame(minWidth: 150.00, maxWidth: 150.00, minHeight: 300.0, maxHeight: .infinity).listStyle(SidebarListStyle())
             }
-        }.frame(minWidth: 650.00, maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        }.frame(minWidth: 650.00, maxWidth: 650.00, minHeight:500.00, maxHeight: 500.00, alignment: .leading)
     }
 }
 
@@ -49,7 +57,9 @@ struct SheetView: View {
     @State var bloomPourTime: CGFloat = 10
     @State var bloomPourTimeConstant: CGFloat = 10
     
-    @State var bloomTime: CGFloat = 5
+    @State var bloomTime: CGFloat = 45
+    @State var bloomTimeConstant: CGFloat = 45
+    
     @State var totalTime: CGFloat = 0
     
     @State var bloomPourFinished: Bool = false
@@ -69,46 +79,65 @@ struct SheetView: View {
     var body: some View {
         
         Section {
-            VStack {
+            VStack (spacing: 25.00) {
                 
                 if self.bloomPourFinished == false {
-                    
-                    
-                    
-                    Circle()
-                        .trim(from: 0, to: (CGFloat(bloomPourTime/bloomPourTimeConstant)))
-                        .stroke(Color.green, lineWidth:5)
-                        .frame(width:100)
-                        .rotationEffect(Angle(degrees:-90))
-                        .onAppear(perform: {
-                            self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-                            
-                        })
-                        .onReceive(timer) { _ in
-                            if self.bloomPourTime > 0 && self.bloomPourFinished == false {
-                                self.bloomPourTime -= self.refreshFrequency
-                                print(self.bloomPourTime)
-                            } else if (self.bloomPourTime < 0) {
-                                self.bloomPourFinished = true
-                                self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-                            }
+                    VStack (spacing: 50.00) {
+                        ZStack {
+                            Circle()
+                                .trim(from: 0, to: (CGFloat(bloomPourTime/bloomPourTimeConstant)))
+                                .stroke(Color.green, lineWidth:5)
+                                .frame(width: 100, height: 100)
+                                .rotationEffect(Angle(degrees:-90))
+                                .onAppear(perform: {
+                                    self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                                    
+                                })
+                                .onReceive(timer) { _ in
+                                    if self.bloomPourTime > 0 && self.bloomPourFinished == false {
+                                        self.bloomPourTime -= self.refreshFrequency
+                                        print(self.bloomPourTime)
+                                    } else if (self.bloomPourTime < 0) {
+                                        self.bloomPourFinished = true
+                                        self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                                    }
+                                }
+                            Text("\(Int(ceil(bloomPourTime)))").font(.system(size: 60))
                         }
-                    Text("Pour first batch of water for coffee to bloom \(Int(ceil(bloomPourTime)))")
+
+                        Text("Pour the first batch of water").bold()
+                    }
                 }
                 
                 if self.bloomPourFinished == true && self.bloomWaitFinished == false {
-                    Text("Wait for your coffee to bloom \(Int(ceil(bloomTime)))")
-                        .onReceive(timer) { _ in
-                            if self.bloomTime > 0 && self.bloomPourFinished == true && self.bloomWaitFinished == false {
-                                self.bloomTime -= self.refreshFrequency
-                            } else if (self.bloomTime < 0) {
-                                self.bloomWaitFinished = true
-                                self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                    VStack (spacing: 50.00) {
+                            ZStack {
+                                Circle()
+                                    .trim(from: 0, to: (CGFloat(bloomTime/bloomTimeConstant)))
+                                    .stroke(Color.green, lineWidth:5)
+                                    .frame(width: 100, height: 100)
+                                    .rotationEffect(Angle(degrees:-90))
+                                    .onAppear(perform: {
+                                        self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                                        
+                                    })
+                                    .onReceive(timer) { _ in
+                                        if self.bloomTime > 0 && self.bloomPourFinished == true && self.bloomWaitFinished == false {
+                                            self.bloomTime -= self.refreshFrequency
+                                        } else if (self.bloomTime < 0) {
+                                            self.bloomWaitFinished = true
+                                            self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                                        }
+                                    }
+                                Text("\(Int(ceil(bloomTime)))").font(.system(size: 60))
                             }
+                        
+                            Text("Wait for your coffee to bloom").bold()
+                        }
                     }
-                }
 
-                Text("Total brew time: \(Int(totalTime))")
+
+                Text("Total brew time: \(Int(totalTime))").font(.caption)
                     .onAppear(perform: {
                         self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
                         
@@ -125,7 +154,7 @@ struct SheetView: View {
                     Text("Cancel")
                 }
             }
-        }.frame(minWidth: 300.00, minHeight: 200.00)
+        }.frame(width: 300.00, height: 250.00).padding(20.00)
         
     }
 }
