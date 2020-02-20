@@ -68,13 +68,6 @@ struct SheetView: View {
     var refreshFrequency: CGFloat = 0.05
 
     @State var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-//    @State var timer: Publishers.Autoconnect<Timer.TimerPublisher>;
-    
-//    func getPercentage(_ current:CGFloat, constant:CGFloat) -> String {
-//        let intValue = Int(ceil(value * 100))
-//        return "\(intValue) %"
-//    }
-
     
     var body: some View {
         
@@ -82,60 +75,38 @@ struct SheetView: View {
             VStack (spacing: 25.00) {
                 
                 if self.bloomPourFinished == false {
-                    VStack (spacing: 50.00) {
-                        ZStack {
-                            Circle()
-                                .trim(from: 0, to: (CGFloat(bloomPourTime/bloomPourTimeConstant)))
-                                .stroke(Color.green, lineWidth:5)
-                                .frame(width: 100, height: 100)
-                                .rotationEffect(Angle(degrees:-90))
-                                .onAppear(perform: {
-                                    self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-                                    
-                                })
-                                .onReceive(timer) { _ in
-                                    if self.bloomPourTime > 0 && self.bloomPourFinished == false {
-                                        self.bloomPourTime -= self.refreshFrequency
-                                        print(self.bloomPourTime)
-                                    } else if (self.bloomPourTime < 0) {
-                                        self.bloomPourFinished = true
-                                        self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-                                    }
-                                }
-                            Text("\(Int(ceil(bloomPourTime)))").font(.system(size: 60))
+                    ProgressView(actionTime: bloomPourTime, actionTimeConstant: bloomPourTimeConstant, refreshFrequency: refreshFrequency)
+                        .onAppear(perform: {
+                            self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                        })
+                        .onReceive(timer) { _ in
+                            if self.bloomPourTime > 0 && self.bloomPourFinished == false {
+                                self.bloomPourTime -= self.refreshFrequency
+                                print(self.bloomPourTime)
+                            } else if (self.bloomPourTime < 0) {
+                                self.bloomPourFinished = true
+                                self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                            }
                         }
-
-                        Text("Pour the first batch of water").bold()
-                    }
+                    Text("Pour the first batch of water").bold()
                 }
                 
                 if self.bloomPourFinished == true && self.bloomWaitFinished == false {
-                    VStack (spacing: 50.00) {
-                            ZStack {
-                                Circle()
-                                    .trim(from: 0, to: (CGFloat(bloomTime/bloomTimeConstant)))
-                                    .stroke(Color.green, lineWidth:5)
-                                    .frame(width: 100, height: 100)
-                                    .rotationEffect(Angle(degrees:-90))
-                                    .onAppear(perform: {
-                                        self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-                                        
-                                    })
-                                    .onReceive(timer) { _ in
-                                        if self.bloomTime > 0 && self.bloomPourFinished == true && self.bloomWaitFinished == false {
-                                            self.bloomTime -= self.refreshFrequency
-                                        } else if (self.bloomTime < 0) {
-                                            self.bloomWaitFinished = true
-                                            self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-                                        }
-                                    }
-                                Text("\(Int(ceil(bloomTime)))").font(.system(size: 60))
+                    
+                    ProgressView(actionTime: bloomTime, actionTimeConstant: bloomTimeConstant, refreshFrequency: refreshFrequency)
+                        .onAppear(perform: {
+                            self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                        })
+                        .onReceive(timer) { _ in
+                            if self.bloomTime > 0 && self.bloomPourFinished == true && self.bloomWaitFinished == false {
+                                self.bloomTime -= self.refreshFrequency
+                            } else if (self.bloomTime < 0) {
+                                self.bloomWaitFinished = true
+                                self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
                             }
-                        
-                            Text("Wait for your coffee to bloom").bold()
                         }
-                    }
-
+                    Text("Wait for your coffee to bloom").bold()
+                }
 
                 Text("Total brew time: \(Int(totalTime))").font(.caption)
                     .onAppear(perform: {
