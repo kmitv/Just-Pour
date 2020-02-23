@@ -60,10 +60,15 @@ struct SheetView: View {
     @State var bloomTime: CGFloat = 45
     @State var bloomTimeConstant: CGFloat = 45
     
+    @State var brewingTime: CGFloat = 65
+    @State var brewingTimeConstant: CGFloat = 65
+    
     @State var totalTime: CGFloat = 0
     
     @State var bloomPourFinished: Bool = false
     @State var bloomWaitFinished: Bool = false
+    @State var brewingFinished: Bool = false
+    @State var lastStage: Bool = false
     
     var refreshFrequency: CGFloat = 0.05
 
@@ -75,15 +80,15 @@ struct SheetView: View {
             VStack (spacing: 25.00) {
                 
                 if self.bloomPourFinished == false {
-                    ProgressView(actionTime: bloomPourTime, actionTimeConstant: bloomPourTimeConstant, refreshFrequency: refreshFrequency)
+                    ProgressView(actionTime: bloomPourTime, actionTimeConstant: bloomPourTimeConstant, refreshFrequency: refreshFrequency, lastStage: lastStage)
                         .onAppear(perform: {
                             self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
                         })
                         .onReceive(timer) { _ in
                             if self.bloomPourTime > 0 && self.bloomPourFinished == false {
                                 self.bloomPourTime -= self.refreshFrequency
-                                print(self.bloomPourTime)
-                            } else if (self.bloomPourTime < 0) {
+                            }
+                            if (self.bloomPourTime < 0.01) {
                                 self.bloomPourFinished = true
                                 self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
                             }
@@ -93,24 +98,37 @@ struct SheetView: View {
                 
                 if self.bloomPourFinished == true && self.bloomWaitFinished == false {
                     
-                    ProgressView(actionTime: bloomTime, actionTimeConstant: bloomTimeConstant, refreshFrequency: refreshFrequency)
+                    ProgressView(actionTime: bloomTime, actionTimeConstant: bloomTimeConstant, refreshFrequency: refreshFrequency, lastStage: lastStage)
                         .onAppear(perform: {
                             self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
                         })
                         .onReceive(timer) { _ in
                             if self.bloomTime > 0 && self.bloomPourFinished == true && self.bloomWaitFinished == false {
                                 self.bloomTime -= self.refreshFrequency
-                            } else if (self.bloomTime < 0) {
+                            }
+                            if (self.bloomTime < 0.01) {
                                 self.bloomWaitFinished = true
                                 self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                                self.lastStage = true
                             }
                         }
                     Text("Wait for your coffee to bloom").bold()
                 }
+                
+                if self.bloomWaitFinished == true {
+                    ProgressView(actionTime: brewingTime, actionTimeConstant: brewingTimeConstant, refreshFrequency: refreshFrequency, lastStage: lastStage)
+                        .onAppear(perform: {
+                            self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                        })
+                        .onReceive(timer) { _ in
+                                self.brewingTime -= self.refreshFrequency
+                        }
+                    Text("Slowly pour remaining water").bold()
+                }
 
-                Text("Total brew time: \(Int(totalTime))").font(.caption)
+                Text("Total brew time: \(Int(floor(totalTime)))").font(.caption)
                     .onAppear(perform: {
-                        self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                        self.timer = Timer.publish(every: Double(floor(self.refreshFrequency)), on: .main, in: .common).autoconnect()
                         
                     })
                     .onReceive(timer) { _ in
