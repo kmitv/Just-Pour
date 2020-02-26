@@ -12,11 +12,9 @@ struct ProgressView: View {
     
     var actionTime: CGFloat
     var actionTimeConstant: CGFloat
-    
     var refreshFrequency: CGFloat
-    
     var lastStage: Bool
-    
+        
     @State private var showGreenWaves = false
     @State private var showOrangeWaves = false
     @State private var showRedWaves = false
@@ -39,7 +37,6 @@ struct ProgressView: View {
     
     var body: some View {
     
-
         Section {
             if (lastStage == false) {
                 VStack (spacing: 50.00) {
