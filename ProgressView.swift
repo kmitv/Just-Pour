@@ -11,7 +11,7 @@ import SwiftUI
 struct ProgressView: View {
     
     var actionTime: CGFloat
-    var actionTimeConstant: CGFloat
+    let actionTimeConstant: CGFloat
     var refreshFrequency: CGFloat
     var lastStage: Bool
         

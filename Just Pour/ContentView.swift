@@ -13,7 +13,7 @@ class pouringPhase: Identifiable {
     var bloom: Bool
     var waterPouring: Bool
     var waiting: Bool
-    var time: CGFloat
+    let time: CGFloat
     var description: String
     var active = false
     
@@ -79,18 +79,7 @@ struct SheetView: View {
 
 // // // // // // // //
 //  RECIPE
-    var recipe: Array<pouringPhase>
-    
-    
-    var recipeConstant: Array<pouringPhase>
-    
-    init(recipe: Array<pouringPhase>) {
-        self.recipeConstant = recipe
-        self.recipe = recipe
-        self.recipe[0].active = true
-        
-        print(self.recipeConstant[0].time)
-    }
+    @State var recipe: Array<pouringPhase>
     
 //    let recipeStagesCount = recipe.count
 //  RECIPE
@@ -100,30 +89,32 @@ struct SheetView: View {
 
     @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
     
+    @State var activeStage: Int = 1
+    
+    @State var activeStageTimer: CGFloat = 0
     
     var body: some View {
         
         Section {
             VStack (spacing: 25.00) {
                 
-                ForEach(recipe) { recipeItem in
+                ForEach(self.recipe) { recipeItem in
 //                    Text("pepepe")
                     
-                    if recipeItem.active == true {
+                    if recipeItem.ID == self.activeStage {
                         
-                        ProgressView(actionTime: recipeItem.time, actionTimeConstant: self.recipeConstant[recipeItem.ID - 1].time, refreshFrequency: self.refreshFrequency, lastStage: false)
+                        ProgressView(actionTime: self.activeStageTimer, actionTimeConstant: recipeItem.time, refreshFrequency: self.refreshFrequency, lastStage: false)
                             .onAppear(perform: {
+                                self.activeStageTimer = recipeItem.time
                                 self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
                             })
                             .onReceive(self.timer) { _ in
-                                print(self.recipeConstant[recipeItem.ID - 1].time)
                                 if recipeItem.time > 0 {
-                                    recipeItem.time -= self.refreshFrequency
-                                    recipeItem.active = true
+                                    self.activeStageTimer -= self.refreshFrequency
                                 }
-                                if (recipeItem.time < 0.01) {
-                                    recipeItem.active = false
-                                    self.recipe[recipeItem.ID].active = true
+                                if (self.activeStageTimer < self.refreshFrequency) {
+                                    self.activeStage += 1
+                                    self.activeStageTimer = 0
                                     self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
                                 }
                             }
@@ -134,53 +125,7 @@ struct SheetView: View {
 
                     
                 }
-                
-//                if self.bloomPourFinished == false {
-//                    ProgressView(actionTime: bloomPourTime, actionTimeConstant: bloomPourTimeConstant, refreshFrequency: refreshFrequency, lastStage: lastStage)
-//                        .onAppear(perform: {
-//                            self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-//                        })
-//                        .onReceive(timer) { _ in
-//                            if self.bloomPourTime > 0 && self.bloomPourFinished == false {
-//                                self.bloomPourTime -= self.refreshFrequency
-//                            }
-//                            if (self.bloomPourTime < 0.01) {
-//                                self.bloomPourFinished = true
-//                                self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-//                            }
-//                        }
-//                    Text("Pour the first batch of water").bold()
-//                }
-//
-//                if self.bloomPourFinished == true && self.bloomWaitFinished == false {
-//
-//                    ProgressView(actionTime: bloomTime, actionTimeConstant: bloomTimeConstant, refreshFrequency: refreshFrequency, lastStage: lastStage)
-//                        .onAppear(perform: {
-//                            self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-//                        })
-//                        .onReceive(timer) { _ in
-//                            if self.bloomTime > 0 && self.bloomPourFinished == true && self.bloomWaitFinished == false {
-//                                self.bloomTime -= self.refreshFrequency
-//                            }
-//                            if (self.bloomTime < 0.01) {
-//                                self.bloomWaitFinished = true
-//                                self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-//                                self.lastStage = true
-//                            }
-//                        }
-//                    Text("Wait for your coffee to bloom").bold()
-//                }
-//
-//                if self.bloomWaitFinished == true {
-//                    ProgressView(actionTime: brewingTime, actionTimeConstant: brewingTimeConstant, refreshFrequency: refreshFrequency, lastStage: lastStage)
-//                        .onAppear(perform: {
-//                            self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-//                        })
-//                        .onReceive(timer) { _ in
-//                                self.brewingTime -= self.refreshFrequency
-//                        }
-//                    Text("Slowly pour remaining water").bold()
-//                }
+
 
                 Text("Total brew time: \(Int(floor(totalTime)))").font(.caption)
                     .onAppear(perform: {
@@ -222,7 +167,7 @@ struct DetailView: View {
     var methodDescription: String
     var methodPicture: String
     
-    var defaultRecipe = [
+    let defaultRecipe = [
         pouringPhase(ID: 1, bloom: true, waterPouring: true, waiting: false, time: 10.00, description: "jeden"),
         pouringPhase(ID: 2, bloom: true, waterPouring: false, waiting: true, time: 45.00, description: "dwa"),
         pouringPhase(ID: 3, bloom: false, waterPouring: true, waiting: true, time: 65.00, description: "trzy")
@@ -319,6 +264,7 @@ struct DetailView: View {
                 
                 
                 Button(action: {
+                    print(self.defaultRecipe[0].time)
                     self.showSheetView.toggle()
                 }) {
                     Text("Start brewing")
