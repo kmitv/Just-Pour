@@ -74,24 +74,13 @@ struct SheetView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @State var totalTime: CGFloat = 0
-    
     @State var lastStage: Bool = false
-
-// // // // // // // //
-//  RECIPE
     @State var recipe: Array<pouringPhase>
-    
-//    let recipeStagesCount = recipe.count
-//  RECIPE
-// // // // // // // //
+    @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
+    @State var activeStage: Int = 1
+    @State var activeStageTimer: CGFloat = 0
     
     var refreshFrequency: CGFloat = 0.05
-
-    @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
-    
-    @State var activeStage: Int = 1
-    
-    @State var activeStageTimer: CGFloat = 0
     
     var body: some View {
         
@@ -99,20 +88,27 @@ struct SheetView: View {
             VStack (spacing: 25.00) {
                 
                 ForEach(self.recipe) { recipeItem in
-//                    Text("pepepe")
-                    
+
                     if recipeItem.ID == self.activeStage {
                         
-                        ProgressView(actionTime: self.activeStageTimer, actionTimeConstant: recipeItem.time, refreshFrequency: self.refreshFrequency, lastStage: false)
+                        ProgressView(actionTime: self.activeStageTimer, actionTimeConstant: recipeItem.time, refreshFrequency: self.refreshFrequency, lastStage: recipeItem.waterPouring && recipeItem.waiting)
                             .onAppear(perform: {
+                                
+                                print(recipeItem.ID)
+                                print(self.activeStage)
+                                
                                 self.activeStageTimer = recipeItem.time
                                 self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
+                                print("apir")
                             })
                             .onReceive(self.timer) { _ in
-                                if recipeItem.time > 0 {
+                                if self.activeStageTimer > 0 || (recipeItem.waterPouring == true && recipeItem.waiting == true) {
                                     self.activeStageTimer -= self.refreshFrequency
+                                    print("if")
+                                    print(self.activeStageTimer)
                                 }
-                                if (self.activeStageTimer < self.refreshFrequency) {
+                                else if (self.activeStageTimer < self.refreshFrequency && !(recipeItem.waterPouring == true && recipeItem.waiting == true)) {
+                                    print("else")
                                     self.activeStage += 1
                                     self.activeStageTimer = 0
                                     self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
@@ -120,12 +116,7 @@ struct SheetView: View {
                             }
                             Text("Pour the first batch of water").bold()
                     }
-                    
-                    
-
-                    
                 }
-
 
                 Text("Total brew time: \(Int(floor(totalTime)))").font(.caption)
                     .onAppear(perform: {
@@ -135,8 +126,7 @@ struct SheetView: View {
                     .onReceive(timer) { _ in
                         self.totalTime += self.refreshFrequency
                     }
-                
-                
+
                 Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
 
@@ -144,8 +134,7 @@ struct SheetView: View {
                     Text("Cancel")
                 }
             }
-        }.frame(width: 300.00, height: 400.00).padding(20.00)
-        
+        }.frame(width: 300.00, height: 250.00).padding(20.00)
     }
 }
 

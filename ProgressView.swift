@@ -49,7 +49,7 @@ struct ProgressView: View {
                         Text("\(Int(ceil(actionTime)))").font(.system(size: 60))
                     }
                 }
-            } else if (lastStage == true && actionTime >= 0) {
+            } else if (lastStage == true) {
                 VStack (spacing: 50.00) {
                     ZStack {
                         Circle()
@@ -64,37 +64,38 @@ struct ProgressView: View {
                         Text("\(Int(ceil(abs(actionTime))))").font(.system(size: 60))
                     }
                 }
-            } else if (lastStage == true && actionTime < 0 && actionTime > -30) {
-                VStack (spacing: 50.00) {
-                    ZStack {
-                        Circle()
-                            .stroke(Color.orange, lineWidth:2)
-                            .frame(width: 100.00, height: 100.00)
-                            .scaleEffect(showOrangeWaves ? 1.5 : 1)
-                            .opacity(showOrangeWaves ? 0 : 1)
-                            .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: false).speed(1))
-                            .onAppear() {
-                                self.showOrangeWaves.toggle()
-                        }
-                        Text("\(Int(ceil(abs(actionTime))))").font(.system(size: 60))
-                    }
-                }
-            } else if (lastStage == true && actionTime <= -30) {
-                VStack (spacing: 50.00) {
-                    ZStack {
-                        Circle()
-                            .stroke(Color.red, lineWidth:2)
-                            .frame(width: 100.00, height: 100.00)
-                            .scaleEffect(showRedWaves ? 1.5 : 1)
-                            .opacity(showRedWaves ? 0 : 1)
-                            .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: false).speed(1))
-                            .onAppear() {
-                                self.showRedWaves.toggle()
-                        }
-                        Text("\(Int(ceil(abs(actionTime))))").font(.system(size: 60))
-                    }
-                }
             }
+//            else if (lastStage == true && actionTime < 0 && actionTime > -30) {
+//                VStack (spacing: 50.00) {
+//                    ZStack {
+//                        Circle()
+//                            .stroke(Color.orange, lineWidth:2)
+//                            .frame(width: 100.00, height: 100.00)
+//                            .scaleEffect(showOrangeWaves ? 1.5 : 1)
+//                            .opacity(showOrangeWaves ? 0 : 1)
+//                            .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: false).speed(1))
+//                            .onAppear() {
+//                                self.showOrangeWaves.toggle()
+//                        }
+//                        Text("\(Int(ceil(abs(actionTime))))").font(.system(size: 60))
+//                    }
+//                }
+//            } else if (lastStage == true && actionTime <= -30) {
+//                VStack (spacing: 50.00) {
+//                    ZStack {
+//                        Circle()
+//                            .stroke(Color.red, lineWidth:2)
+//                            .frame(width: 100.00, height: 100.00)
+//                            .scaleEffect(showRedWaves ? 1.5 : 1)
+//                            .opacity(showRedWaves ? 0 : 1)
+//                            .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: false).speed(1))
+//                            .onAppear() {
+//                                self.showRedWaves.toggle()
+//                        }
+//                        Text("\(Int(ceil(abs(actionTime))))").font(.system(size: 60))
+//                    }
+//                }
+//            }
         }
     }
 }
