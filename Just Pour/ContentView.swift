@@ -90,8 +90,8 @@ struct SheetView: View {
                 ForEach(self.recipe) { recipeItem in
 
                     if recipeItem.ID == self.activeStage {
-                        
-                        ProgressView(actionTime: self.activeStageTimer, actionTimeConstant: recipeItem.time, refreshFrequency: self.refreshFrequency, lastStage: recipeItem.waterPouring && recipeItem.waiting)
+                        // przekazać kolor do progress view
+                        ProgressView(actionTime: self.activeStageTimer, actionTimeConstant: recipeItem.time, refreshFrequency: self.refreshFrequency, lastStage: recipeItem.waterPouring && recipeItem.waiting, circleColor: recipeItem.waiting == true ? Color.blue: Color.yellow)
                             .onAppear(perform: {
                                 
                                 print(recipeItem.ID)

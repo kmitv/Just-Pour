@@ -14,6 +14,7 @@ struct ProgressView: View {
     let actionTimeConstant: CGFloat
     var refreshFrequency: CGFloat
     var lastStage: Bool
+    var circleColor: Color
         
     @State private var showGreenWaves = false
     @State private var showOrangeWaves = false
@@ -43,7 +44,7 @@ struct ProgressView: View {
                     ZStack {
                         Circle()
                             .trim(from: 0, to: (CGFloat(actionTime/actionTimeConstant)))
-                            .stroke(Color.green, lineWidth:2)
+                            .stroke(self.circleColor, lineWidth:2)
                             .frame(width: 100, height: 100)
                             .rotationEffect(Angle(degrees:-90.00))
                         Text("\(Int(ceil(actionTime)))").font(.system(size: 60))
@@ -53,12 +54,13 @@ struct ProgressView: View {
                 VStack (spacing: 50.00) {
                     ZStack {
                         Circle()
-                            .stroke(Color.green, lineWidth:2)
+                            .stroke(self.circleColor, lineWidth:2)
                             .frame(width: 100.00, height: 100.00)
                             .scaleEffect(showGreenWaves ? 1.5 : 1)
                             .opacity(showGreenWaves ? 0 : 1)
                             .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: false).speed(1))
                             .onAppear() {
+                                print("kqkqkqkq")
                                 self.showGreenWaves.toggle()
                         }
                         Text("\(Int(ceil(abs(actionTime))))").font(.system(size: 60))
