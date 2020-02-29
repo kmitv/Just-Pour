@@ -82,33 +82,38 @@ struct SheetView: View {
     
     var refreshFrequency: CGFloat = 0.05
     
+    func setCircleColor(actionTime: CGFloat, bloom: Bool, waterPouring: Bool, waiting: Bool) -> Color {
+        if (waterPouring == false || waiting == false) {
+            return Color.green
+        }
+        else if (waterPouring == true && waiting == true && actionTime >= 0) {
+            return Color.green
+        } else if (waterPouring == true && waiting == true && actionTime < 0 && actionTime >= -30) {
+            return Color.orange
+        } else if (waterPouring == true && waiting == true && actionTime < -30) {
+            return Color.red
+        } else {
+            return Color.green
+        }
+    }
+    
     var body: some View {
         
         Section {
             VStack (spacing: 25.00) {
                 
                 ForEach(self.recipe) { recipeItem in
-
                     if recipeItem.ID == self.activeStage {
-                        // przekazać kolor do progress view
-                        ProgressView(actionTime: self.activeStageTimer, actionTimeConstant: recipeItem.time, refreshFrequency: self.refreshFrequency, lastStage: recipeItem.waterPouring && recipeItem.waiting, circleColor: recipeItem.waiting == true ? Color.blue: Color.yellow)
+                        ProgressView(actionTime: self.activeStageTimer, actionTimeConstant: recipeItem.time, refreshFrequency: self.refreshFrequency, lastStage: recipeItem.waterPouring && recipeItem.waiting, circleColor: self.setCircleColor(actionTime: self.activeStageTimer, bloom: recipeItem.bloom, waterPouring: recipeItem.waterPouring, waiting: recipeItem.waiting))
                             .onAppear(perform: {
-                                
-                                print(recipeItem.ID)
-                                print(self.activeStage)
-                                
                                 self.activeStageTimer = recipeItem.time
                                 self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
-                                print("apir")
                             })
                             .onReceive(self.timer) { _ in
                                 if self.activeStageTimer > 0 || (recipeItem.waterPouring == true && recipeItem.waiting == true) {
                                     self.activeStageTimer -= self.refreshFrequency
-                                    print("if")
-                                    print(self.activeStageTimer)
                                 }
                                 else if (self.activeStageTimer < self.refreshFrequency && !(recipeItem.waterPouring == true && recipeItem.waiting == true)) {
-                                    print("else")
                                     self.activeStage += 1
                                     self.activeStageTimer = 0
                                     self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
@@ -129,7 +134,6 @@ struct SheetView: View {
 
                 Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
-
                 }) {
                     Text("Cancel")
                 }
@@ -157,9 +161,9 @@ struct DetailView: View {
     var methodPicture: String
     
     let defaultRecipe = [
-        pouringPhase(ID: 1, bloom: true, waterPouring: true, waiting: false, time: 10.00, description: "jeden"),
-        pouringPhase(ID: 2, bloom: true, waterPouring: false, waiting: true, time: 45.00, description: "dwa"),
-        pouringPhase(ID: 3, bloom: false, waterPouring: true, waiting: true, time: 65.00, description: "trzy")
+        pouringPhase(ID: 1, bloom: true, waterPouring: true, waiting: false, time: 5.00, description: "jeden"),
+        pouringPhase(ID: 2, bloom: true, waterPouring: false, waiting: true, time: 5.00, description: "dwa"),
+        pouringPhase(ID: 3, bloom: false, waterPouring: true, waiting: true, time: 5.00, description: "trzy")
     ]
     
     func disableIfActive(activeIndex: Int, selected: Int) -> Bool {
@@ -250,17 +254,14 @@ struct DetailView: View {
                     ).tag(3).disabled(disableIfActive(activeIndex: 3, selected: radioSelection))
                     
                 }.pickerStyle(RadioGroupPickerStyle())
-                
-                
+
                 Button(action: {
-                    print(self.defaultRecipe[0].time)
                     self.showSheetView.toggle()
                 }) {
                     Text("Start brewing")
                 }.sheet(isPresented: $showSheetView) {
                     SheetView(recipe: self.defaultRecipe)
                 }
-                
             }.frame(minWidth: 100.00, maxWidth: .infinity, maxHeight: .infinity).padding(.horizontal, 100.0)
         }
         .padding(.top, 20.0)

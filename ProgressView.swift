@@ -16,25 +16,9 @@ struct ProgressView: View {
     var lastStage: Bool
     var circleColor: Color
         
-    @State private var showGreenWaves = false
+    @State private var showGreenWaves = true
     @State private var showOrangeWaves = false
     @State private var showRedWaves = false
-    
-    func zeroIfNegative(actionTime: CGFloat) -> CGFloat {
-        if(actionTime < 0){
-            return 0
-        } else {
-            return actionTime
-        }
-    }
-    
-    func waveColor(actionTime: CGFloat) -> Color {
-        if(actionTime > 0){
-            return .blue
-        } else {
-            return .red
-        }
-    }
     
     var body: some View {
     
@@ -56,48 +40,17 @@ struct ProgressView: View {
                         Circle()
                             .stroke(self.circleColor, lineWidth:2)
                             .frame(width: 100.00, height: 100.00)
-                            .scaleEffect(showGreenWaves ? 1.5 : 1)
-                            .opacity(showGreenWaves ? 0 : 1)
-                            .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: false).speed(1))
+                            .scaleEffect(showGreenWaves ? 0 : 1.5)
+                            .opacity(showGreenWaves ? 1 : 0)
                             .onAppear() {
-                                print("kqkqkqkq")
-                                self.showGreenWaves.toggle()
-                        }
+                                withAnimation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: false).speed(1)) {
+                                    self.showGreenWaves.toggle()
+                                }
+                            }
                         Text("\(Int(ceil(abs(actionTime))))").font(.system(size: 60))
                     }
                 }
             }
-//            else if (lastStage == true && actionTime < 0 && actionTime > -30) {
-//                VStack (spacing: 50.00) {
-//                    ZStack {
-//                        Circle()
-//                            .stroke(Color.orange, lineWidth:2)
-//                            .frame(width: 100.00, height: 100.00)
-//                            .scaleEffect(showOrangeWaves ? 1.5 : 1)
-//                            .opacity(showOrangeWaves ? 0 : 1)
-//                            .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: false).speed(1))
-//                            .onAppear() {
-//                                self.showOrangeWaves.toggle()
-//                        }
-//                        Text("\(Int(ceil(abs(actionTime))))").font(.system(size: 60))
-//                    }
-//                }
-//            } else if (lastStage == true && actionTime <= -30) {
-//                VStack (spacing: 50.00) {
-//                    ZStack {
-//                        Circle()
-//                            .stroke(Color.red, lineWidth:2)
-//                            .frame(width: 100.00, height: 100.00)
-//                            .scaleEffect(showRedWaves ? 1.5 : 1)
-//                            .opacity(showRedWaves ? 0 : 1)
-//                            .animation(Animation.easeInOut(duration: 2).repeatForever(autoreverses: false).speed(1))
-//                            .onAppear() {
-//                                self.showRedWaves.toggle()
-//                        }
-//                        Text("\(Int(ceil(abs(actionTime))))").font(.system(size: 60))
-//                    }
-//                }
-//            }
         }
     }
 }
