@@ -20,6 +20,14 @@ struct ProgressView: View {
     @State private var showOrangeWaves = false
     @State private var showRedWaves = false
     
+    func roundActionTIme(actionTime: CGFloat) -> String {
+        if (actionTime > 0) {
+            return "\(Int(ceil(abs(actionTime))))"
+        } else {
+            return "\(Int(floor(abs(actionTime))))"
+        }
+    }
+    
     var body: some View {
     
         Section {
@@ -47,7 +55,7 @@ struct ProgressView: View {
                                     self.showGreenWaves.toggle()
                                 }
                             }
-                        Text("\(Int(ceil(abs(actionTime))))").font(.system(size: 60))
+                        Text(self.roundActionTIme(actionTime: self.actionTime)).font(.system(size: 60))
                     }
                 }
             }
