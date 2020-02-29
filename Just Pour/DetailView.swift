@@ -133,9 +133,3 @@ struct DetailView: View {
         .padding(.top, 20.0)
     }
 }
-
-//struct DetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DetailView()
-//    }
-//}
