@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     var window: NSWindow!
     
-    var panel: NSPanel!
+    var panel: NSWindow!
 
     @IBAction func newRecipe(_ sender: Any) {
         print("kekekekeke")
@@ -25,13 +25,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
 //        let contentView = ContentView().environment(\.managedObjectContext, persistentContainer.viewContext)
 
-        panel = NSPanel(
+        panel = NSWindow (
             contentRect: NSRect(x: 0, y: 0, width: 100, height: 100),
-            styleMask: [.titled, .closable, .fullSizeContentView],
+            styleMask: [.titled, .fullSizeContentView],
             backing: .buffered, defer: false
         )
         panel.center()
-        panel.isFloatingPanel = true
+//        panel.isFloatingPanel = true
         panel.setFrameAutosaveName("Main Window")
 //        panel.contentView = NSHostingView(rootView: contentView)
         panel.makeKeyAndOrderFront(nil)
