@@ -9,12 +9,37 @@
 import Cocoa
 import SwiftUI
 
+let app = NSApplication.shared
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     var window: NSWindow!
+    
+    var panel: NSPanel!
 
+    @IBAction func newRecipe(_ sender: Any) {
+        print("kekekekeke")
+        
+//        app.runModal(for: window)
+        
+//        let contentView = ContentView().environment(\.managedObjectContext, persistentContainer.viewContext)
 
+        panel = NSPanel(
+            contentRect: NSRect(x: 0, y: 0, width: 100, height: 100),
+            styleMask: [.titled, .closable, .fullSizeContentView],
+            backing: .buffered, defer: false
+        )
+        panel.center()
+        panel.isFloatingPanel = true
+        panel.setFrameAutosaveName("Main Window")
+//        panel.contentView = NSHostingView(rootView: contentView)
+        panel.makeKeyAndOrderFront(nil)
+        
+        app.runModal(for: panel)
+        
+    }
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.

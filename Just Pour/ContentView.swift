@@ -27,19 +27,19 @@ class pouringPhase: Identifiable {
     }
 }
 
-struct ContentView: View {
-
-    class pouroverMethod: Identifiable {
-        var name: String
-        var description: String
-        var picture: String
-        
-        init(name: String, description: String, picture: String) {
-            self.name = name
-            self.description = description
-            self.picture = picture
-        }
+class pouroverMethod: Identifiable {
+    var name: String
+    var description: String
+    var picture: String
+    
+    init(name: String, description: String, picture: String) {
+        self.name = name
+        self.description = description
+        self.picture = picture
     }
+}
+
+struct ContentView: View {
     
     let pouroverMethodList = [
         pouroverMethod(name: "V60", description: "V60 is a pour-over cone made of plastic, ceramic, metal, or glass. It is produced by Hario, a Japanese company.", picture:"v60_icon"),
@@ -58,6 +58,7 @@ struct ContentView: View {
 
     var body: some View {
         Section {
+            
             NavigationView {
                 List(pouroverMethodList) { method in
                     NavigationLink(destination: DetailView(methodName: method.name, methodDescription: method.description, methodPicture: method.picture)) {
