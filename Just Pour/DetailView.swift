@@ -128,7 +128,7 @@ struct DetailView: View {
                 }.sheet(isPresented: $showSheetView) {
                     SheetView(recipe: self.defaultRecipe)
                 }
-            }.frame(minWidth: 100.00, maxWidth: .infinity, maxHeight: .infinity).padding(.horizontal, 100.0)
+            }.frame(minWidth: 100.00, maxWidth: 500.00, minHeight: 500.00,maxHeight: 500.00).padding(.horizontal, 100.0).edgesIgnoringSafeArea(.top)
         }
         .padding(.top, 20.0)
     }

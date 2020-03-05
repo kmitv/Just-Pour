@@ -23,18 +23,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
 //        app.runModal(for: window)
         
-//        let contentView = ContentView().environment(\.managedObjectContext, persistentContainer.viewContext)
+        let contentView = RecipeCreationPopupView().environment(\.managedObjectContext, persistentContainer.viewContext)
 
-        panel = NSWindow (
-            contentRect: NSRect(x: 0, y: 0, width: 100, height: 100),
-            styleMask: [.titled, .fullSizeContentView],
-            backing: .buffered, defer: false
-        )
-        panel.center()
-//        panel.isFloatingPanel = true
-        panel.setFrameAutosaveName("Main Window")
-//        panel.contentView = NSHostingView(rootView: contentView)
-        panel.makeKeyAndOrderFront(nil)
+        panel = NSWindow ()
+//        panel.center()
+//        panel.setFrameAutosaveName("Main Window")
+        panel.contentView = NSHostingView(rootView: contentView)
+//        panel.makeKeyAndOrderFront(nil)
         
         app.runModal(for: panel)
         
@@ -49,13 +44,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
             styleMask: [.titled, .closable, .miniaturizable, .fullSizeContentView],
-            backing: .buffered, defer: false)
-        window.center()
-        window.setFrameAutosaveName("Main Window")
+            backing: .buffered, defer: false
+        )
+//        window.center()
+//        window.setFrameAutosaveName("Main Window")
         window.contentView = NSHostingView(rootView: contentView)
         window.makeKeyAndOrderFront(nil)
         
-//        window?.titlebarAppearsTransparent = true        
+        window?.isOpaque = false
+        
+//        window?.backgroundColor = NSColor(red: 1, green: 0, blue: 0, alpha: 0.5)
+
+
+        
+//        window.titleVisibility = .hidden
+        
+//        window.styleMask.insert(NSWindow.StyleMask.fullSizeContentView)
+
+//        window.styleMask.insert(NSWindow.StyleMask.fullSizeContentView)
+        window.titlebarAppearsTransparent = true
+        window.titleVisibility = .hidden
+        
+
+//        window.styleMask |= NSFullSizeContentViewWindowMask
+        
+        
+        
+        
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

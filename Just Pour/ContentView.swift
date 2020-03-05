@@ -65,9 +65,9 @@ struct ContentView: View {
                         Text(method.name)
                     }.disabled(self.disableLink(method: method))
                 }
-                .frame(minWidth: 150.00, maxWidth: 150.00, minHeight: 300.0, maxHeight: .infinity).listStyle(SidebarListStyle())
+                .listStyle(SidebarListStyle())
             }
-        }.frame(minWidth: 650.00, maxWidth: 650.00, minHeight:500.00, maxHeight: 500.00, alignment: .leading)
+        }.frame(minWidth: 650.00, maxWidth: 650.00, minHeight:500.00, maxHeight: 500.00, alignment: .leading).edgesIgnoringSafeArea(.top)
     }
 }
 
