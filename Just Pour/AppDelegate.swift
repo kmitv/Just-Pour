@@ -9,28 +9,48 @@
 import Cocoa
 import SwiftUI
 
+let app = NSApplication.shared
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     var window: NSWindow!
+    
+    var panel: NSWindow!
 
+    @IBAction func newRecipe(_ sender: Any) {
+        print("kekekekeke")
+        
+//        app.runModal(for: window)
+        
+        let contentView = RecipeCreationPopupView().environment(\.managedObjectContext, persistentContainer.viewContext)
 
+        panel = NSWindow ()
+//        panel.center()
+//        panel.setFrameAutosaveName("Main Window")
+        panel.contentView = NSHostingView(rootView: contentView)
+//        panel.makeKeyAndOrderFront(nil)
+        
+        app.runModal(for: panel)
+        
+    }
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
-        // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
-        let contentView = ContentView().environment(\.managedObjectContext, persistentContainer.viewContext)
 
-        // Create the window and set the content view. 
+        let contentView = ContentView().edgesIgnoringSafeArea(.top)
+
         window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
+            contentRect: NSRect(x: 0, y: 0, width: 650, height: 600),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
-            backing: .buffered, defer: false)
-        window.center()
-        window.setFrameAutosaveName("Main Window")
+            backing: .buffered, defer: false
+        )
         window.contentView = NSHostingView(rootView: contentView)
         window.makeKeyAndOrderFront(nil)
         
-//        window?.titlebarAppearsTransparent = true        
+        window?.isOpaque = false
+        
+        window.titlebarAppearsTransparent = true
+        window.titleVisibility = .hidden
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

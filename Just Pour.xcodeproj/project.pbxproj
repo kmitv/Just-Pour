@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E183C112411A5E40005C52E /* RecipeCreationPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E183C102411A5E40005C52E /* RecipeCreationPopupView.swift */; };
+		2E21BCD3240AC770003C71FB /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E21BCD2240AC770003C71FB /* DetailView.swift */; };
+		2E21BCD5240AC83B003C71FB /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E21BCD4240AC83B003C71FB /* SheetView.swift */; };
 		2E98641B23FF0FB200D3410A /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E98641A23FF0FB200D3410A /* ProgressView.swift */; };
 		2EBC73DE23EEC58B007B8EED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC73DD23EEC58B007B8EED /* AppDelegate.swift */; };
 		2EBC73E023EEC58B007B8EED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC73DF23EEC58B007B8EED /* ContentView.swift */; };
@@ -17,6 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2E183C102411A5E40005C52E /* RecipeCreationPopupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeCreationPopupView.swift; sourceTree = "<group>"; };
+		2E21BCD2240AC770003C71FB /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		2E21BCD4240AC83B003C71FB /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
 		2E98641A23FF0FB200D3410A /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = SOURCE_ROOT; };
 		2EBC73DA23EEC58B007B8EED /* Just Pour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Just Pour.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EBC73DD23EEC58B007B8EED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -59,9 +65,12 @@
 		2EBC73DC23EEC58B007B8EED /* Just Pour */ = {
 			isa = PBXGroup;
 			children = (
+				2E183C102411A5E40005C52E /* RecipeCreationPopupView.swift */,
 				2E98641A23FF0FB200D3410A /* ProgressView.swift */,
 				2EBC73DD23EEC58B007B8EED /* AppDelegate.swift */,
 				2EBC73DF23EEC58B007B8EED /* ContentView.swift */,
+				2E21BCD4240AC83B003C71FB /* SheetView.swift */,
+				2E21BCD2240AC770003C71FB /* DetailView.swift */,
 				2EBC73E423EEC58D007B8EED /* Assets.xcassets */,
 				2EBC73E923EEC58D007B8EED /* Main.storyboard */,
 				2EBC73EC23EEC58D007B8EED /* Info.plist */,
@@ -154,6 +163,9 @@
 				2EBC73E323EEC58B007B8EED /* Just_Pour.xcdatamodeld in Sources */,
 				2E98641B23FF0FB200D3410A /* ProgressView.swift in Sources */,
 				2EBC73E023EEC58B007B8EED /* ContentView.swift in Sources */,
+				2E21BCD3240AC770003C71FB /* DetailView.swift in Sources */,
+				2E183C112411A5E40005C52E /* RecipeCreationPopupView.swift in Sources */,
+				2E21BCD5240AC83B003C71FB /* SheetView.swift in Sources */,
 				2EBC73DE23EEC58B007B8EED /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
