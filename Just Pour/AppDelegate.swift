@@ -36,41 +36,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
-        // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
-        let contentView = ContentView().environment(\.managedObjectContext, persistentContainer.viewContext)
 
-        // Create the window and set the content view. 
+        let contentView = ContentView().edgesIgnoringSafeArea(.top)
+
         window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
-            styleMask: [.titled, .closable, .miniaturizable, .fullSizeContentView],
+            contentRect: NSRect(x: 0, y: 0, width: 650, height: 600),
+            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false
         )
-//        window.center()
-//        window.setFrameAutosaveName("Main Window")
         window.contentView = NSHostingView(rootView: contentView)
         window.makeKeyAndOrderFront(nil)
         
         window?.isOpaque = false
         
-//        window?.backgroundColor = NSColor(red: 1, green: 0, blue: 0, alpha: 0.5)
-
-
-        
-//        window.titleVisibility = .hidden
-        
-//        window.styleMask.insert(NSWindow.StyleMask.fullSizeContentView)
-
-//        window.styleMask.insert(NSWindow.StyleMask.fullSizeContentView)
         window.titlebarAppearsTransparent = true
         window.titleVisibility = .hidden
-        
-
-//        window.styleMask |= NSFullSizeContentViewWindowMask
-        
-        
-        
-        
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

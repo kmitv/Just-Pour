@@ -58,16 +58,37 @@ struct ContentView: View {
 
     var body: some View {
         Section {
-            
             NavigationView {
                 List(pouroverMethodList) { method in
                     NavigationLink(destination: DetailView(methodName: method.name, methodDescription: method.description, methodPicture: method.picture)) {
                         Text(method.name)
                     }.disabled(self.disableLink(method: method))
                 }
-                .listStyle(SidebarListStyle())
+                .frame(minWidth: 150.00, maxWidth: 150.00, minHeight: 500.0, maxHeight: .infinity).listStyle(SidebarListStyle()).padding(.top, 30.00)
             }
-        }.frame(minWidth: 650.00, maxWidth: 650.00, minHeight:500.00, maxHeight: 500.00, alignment: .leading).edgesIgnoringSafeArea(.top)
+        }.frame(minWidth: 650.00, maxWidth: 650.00, minHeight: 500.00, maxHeight: 500.00, alignment: .leading)
+        
+        
+//            NavigationView {
+//                List(pouroverMethodList) { method in
+//                    NavigationLink(destination: DetailView(methodName: method.name, methodDescription: method.description, methodPicture: method.picture)) {
+//                        Text(method.name)
+//                    }.disabled(self.disableLink(method: method))
+//                }
+//                .listStyle(SidebarListStyle()).padding(.top, 30.00)
+//            }.frame(width: 150.00, height: 500.00)
+//        }.frame(width: 650.00, height: 460.00, alignment: .leading)
+        
+        
+        //        HSplitView {
+        //            List(pouroverMethodList) { method in
+        //                NavigationLink(destination: DetailView(methodName: method.name, methodDescription: method.description, methodPicture: method.picture)) {
+        //                    Text(method.name)
+        //                }.disabled(self.disableLink(method: method))
+        //            }.listStyle(SidebarListStyle()).padding(.top, 10.00)
+        //
+        //            Text("Trailing")
+        //        }.frame(width: 600.00, height: 450.00)
     }
 }
 

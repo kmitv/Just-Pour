@@ -66,6 +66,72 @@ struct DetailView: View {
             self.amount = water / ratio
         }
     }
+//
+//    var body: some View {
+//
+//        VStack {
+//            Section {
+//                VStack(spacing: 20.0) {
+//                    VStack(alignment: .center) {
+//                        Image(methodPicture)
+//                            .resizable().frame(width: 64.0, height: 64.0)
+//                        Text(methodName)
+//                            .foregroundColor(/*@START_MENU_TOKEN@*/.white/*@END_MENU_TOKEN@*/)
+//                    }
+//                    .frame(width: 100.00, height: 100.00)
+//                    .padding(.horizontal, 20.0)
+//                    .padding(.vertical, 10.0)
+//                    .background(/*@START_MENU_TOKEN@*/Color.blue/*@END_MENU_TOKEN@*/)
+//                    .cornerRadius(15.00)
+//                    Text(methodDescription)
+//                        .frame(width: 400.00, height: 75.00)
+//                        .multilineTextAlignment(.center)
+//                }
+//                .padding(.horizontal, 30.0)
+//            }.frame(minHeight: 250.00)
+//            Section {
+//                Picker(selection: $radioSelection, label: EmptyView()) {
+//
+//                    Stepper(onIncrement: {
+//                        self.amount += 1
+//                        self.amountUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+//                    }, onDecrement: {
+//                        self.amount -= 1
+//                        self.amountUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+//                    }, label: { Text("Coffee amount:  \(amount) g")}
+//                    ).tag(1).disabled(disableIfActive(activeIndex: 1, selected: radioSelection))
+//
+//                    Stepper(onIncrement: {
+//                        self.water += 1
+//                        self.waterUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+//                    }, onDecrement: {
+//                        self.water -= 1
+//                        self.waterUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+//                    }, label: { Text("Water:  \(water) ml")}
+//                    ).tag(2).disabled(disableIfActive(activeIndex: 2, selected: radioSelection))
+//
+//                    Stepper(onIncrement: {
+//                        self.ratio += 1
+//                        self.ratioUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+//                    }, onDecrement: {
+//                        self.ratio -= 1
+//                        self.ratioUpdated(amount: self.amount, water: self.water, ratio: self.ratio, selection: self.radioSelection)
+//                    }, label: { Text("Coffee to water ratio:  \(ratio) g/ml")}
+//                    ).tag(3).disabled(disableIfActive(activeIndex: 3, selected: radioSelection))
+//
+//                }.pickerStyle(RadioGroupPickerStyle())
+//
+//                Button(action: {
+//                    self.showSheetView.toggle()
+//                }) {
+//                    Text("Start brewing")
+//                }.sheet(isPresented: $showSheetView) {
+//                    SheetView(recipe: self.defaultRecipe)
+//                }
+//            }.frame(minWidth: 100.00, maxWidth: 500.00, minHeight: 500.00,maxHeight: 500.00)
+//        }
+//        .padding(.top, 20.0)
+//    }
     
     var body: some View {
         
@@ -120,7 +186,8 @@ struct DetailView: View {
                     ).tag(3).disabled(disableIfActive(activeIndex: 3, selected: radioSelection))
                     
                 }.pickerStyle(RadioGroupPickerStyle())
-
+                
+                
                 Button(action: {
                     self.showSheetView.toggle()
                 }) {
@@ -128,7 +195,8 @@ struct DetailView: View {
                 }.sheet(isPresented: $showSheetView) {
                     SheetView(recipe: self.defaultRecipe)
                 }
-            }.frame(minWidth: 100.00, maxWidth: 500.00, minHeight: 500.00,maxHeight: 500.00).padding(.horizontal, 100.0).edgesIgnoringSafeArea(.top)
+                
+            }.frame(minWidth: 100.00, maxWidth: .infinity, maxHeight: .infinity).padding(.horizontal, 100.0)
         }
         .padding(.top, 20.0)
     }
