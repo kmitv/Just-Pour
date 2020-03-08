@@ -19,17 +19,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var panel: NSWindow!
 
     @IBAction func newRecipe(_ sender: Any) {
-        print("kekekekeke")
-        
-//        app.runModal(for: window)
-        
         let contentView = RecipeCreationPopupView().environment(\.managedObjectContext, persistentContainer.viewContext)
 
         panel = NSWindow ()
-//        panel.center()
-//        panel.setFrameAutosaveName("Main Window")
         panel.contentView = NSHostingView(rootView: contentView)
-//        panel.makeKeyAndOrderFront(nil)
         
         app.runModal(for: panel)
         
@@ -41,7 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 650, height: 600),
-            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
+            styleMask: [.titled, .closable, .miniaturizable, .fullSizeContentView],
             backing: .buffered, defer: false
         )
         window.contentView = NSHostingView(rootView: contentView)
@@ -66,7 +59,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
         */
-        let container = NSPersistentContainer(name: "Just_Pour")
+        let container = NSPersistentContainer(name: "Recipes")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error {
                 // Replace this implementation with code to handle the error appropriately.
@@ -87,7 +80,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }()
 
     // MARK: - Core Data Saving and Undo support
-
+    
+    func saveContext () {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                // Show the error here
+            }
+        }
+    }
+    
     @IBAction func saveAction(_ sender: AnyObject?) {
         // Performs the save action for the application, which is to send the save: message to the application's managed object context. Any encountered errors are presented to the user.
         let context = persistentContainer.viewContext

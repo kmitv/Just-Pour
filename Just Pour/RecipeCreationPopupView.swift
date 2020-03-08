@@ -17,6 +17,22 @@ struct RecipeCreationPopupView: View {
         Section {
             if (isViewVisible == true) {
                 VStack {
+                    
+                    Button(action: {
+                        
+                        
+                        
+                        app.stopModal()
+                        self.isViewVisible = false
+                        
+                        
+                        
+                        
+                    }) {
+                            Text("Add mock data")
+                        }
+                    
+                    
                     Button(action: {
                         app.stopModal()
                         self.isViewVisible = false
@@ -24,6 +40,8 @@ struct RecipeCreationPopupView: View {
                     }) {
                             Text("Close")
                         }
+                    
+                    
                     }
                 }
             }

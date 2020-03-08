@@ -57,7 +57,7 @@ struct SheetView: View {
                                     self.timer = Timer.publish(every: Double(self.refreshFrequency), on: .main, in: .common).autoconnect()
                                 }
                             }
-                            Text("Pour the first batch of water").bold()
+                        Text("\(recipeItem.description)").bold()
                     }
                 }
 

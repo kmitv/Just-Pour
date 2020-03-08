@@ -27,9 +27,9 @@ struct DetailView: View {
     var methodPicture: String
     
     let defaultRecipe = [
-        pouringPhase(ID: 1, bloom: true, waterPouring: true, waiting: false, time: 5.00, description: "jeden"),
-        pouringPhase(ID: 2, bloom: true, waterPouring: false, waiting: true, time: 5.00, description: "dwa"),
-        pouringPhase(ID: 3, bloom: false, waterPouring: true, waiting: true, time: 5.00, description: "trzy")
+        pouringPhase(ID: 1, bloom: true, waterPouring: true, waiting: false, time: 10.00, description: "Pour the first portion of water"),
+        pouringPhase(ID: 2, bloom: true, waterPouring: false, waiting: true, time: 45.00, description: "Wait for your coffee to bloom"),
+        pouringPhase(ID: 3, bloom: false, waterPouring: true, waiting: true, time: 65.00, description: "Slowly pour the remaining water")
     ]
     
     func disableIfActive(activeIndex: Int, selected: Int) -> Bool {
